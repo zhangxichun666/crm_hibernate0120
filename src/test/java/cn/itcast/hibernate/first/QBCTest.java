@@ -28,6 +28,9 @@ public class QBCTest {
 
         List list = criteria.list();
 
+        //第一次打印
+        System.out.println(list);
+        //第二次打印
         System.out.println(list);
     }
 }
