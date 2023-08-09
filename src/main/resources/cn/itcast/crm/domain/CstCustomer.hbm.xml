@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- 配置表和类的映射关系 -->
+<hibernate-mapping >
+	<!-- 将表和类对应起来
+	name：类名，写类的全限定名 （必须配置）
+	table：表名（必须配置）
+	catalog：使用mysql配置数据库名，可以不用配置
+	schema：使用oracle时候配置用户名
+	
+	 -->
+	<class name="cn.itcast.crm.domain.CstCustomer" table="cst_customer" >
+		<!-- 主键映射 
+		name：表中的主键对应的属性
+		type：属性的类型
+		-->
+		<id name="custId" type="java.lang.Long">
+			<!-- 对应表中主键字段 -->
+			<column name="cust_id"></column>
+			<!-- 主键生成策略 
+			identity：自增主键生成策略
+			还有其它策略：uuid（唯一串），assgiend（手动指定）、sequence（用于oracle中的序列生成主键）
+			-->
+			<generator class="identity"></generator>
+		</id>
+		
+		<!-- 普通属性和字段的映射 
+		name:类中的属性
+		-->
+		<property name="custName" type="string">
+			<!-- 属性对应的字段 -->
+			<column name="cust_name"></column>
+		</property>
+		
+		 <property name="custUserId" type="java.lang.Long">
+            <column name="cust_user_id"></column>
+        </property>
+        <property name="custCreateId" type="java.lang.Long">
+            <column name="cust_create_id"></column>
+        </property>
+      
+        <property name="custSource" type="string">
+            <column name="cust_source" length="32"></column>
+        </property>
+        <property name="custIndustry" type="string">
+            <column name="cust_industry" length="32"></column>
+        </property>
+        <property name="custLevel" type="string">
+            <column name="cust_level" length="32"></column>
+        </property>
+        <property name="custLinkman" type="string">
+            <column name="cust_linkman" length="64"></column>
+        </property>
+        <property name="custPhone" type="string">
+            <column name="cust_phone" length="64"></column>
+        </property>
+        <property name="custMobile" type="string">
+            <column name="cust_mobile" length="16"></column>
+        </property>
+		
+	</class>
+
+</hibernate-mapping>
