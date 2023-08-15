@@ -29,11 +29,64 @@ public class CustomerServlet extends HttpServlet {
 			req.getRequestDispatcher("/jsp/customer/add.jsp").forward(req, resp);
 		}else if(method.equals("addsubmit")){
 			this.addsubmit(req, resp);
+		}else if(method.equals("list")){
+			this.list(req, resp);
 		}
 	}
 
+	//查询客户提交
+	private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		CustomerService customerService = new CustomerServiceImpl();
+
+		//----------封装查询条件--------------
+		CstCustomer query_cstCustomer = new CstCustomer();
+		//客户名称
+		String custName = req.getParameter("custName");
+		//客户联系人
+		String custLinkman = req.getParameter("custLinkman");
+
+		query_cstCustomer.setCustName(custName);
+		query_cstCustomer.setCustLinkman(custLinkman);
+		//查询记录总数
+		long total = customerService.findCustomerCount(query_cstCustomer);
+
+		//-----------分页参数-------------
+
+		//每页显示个数
+		String pageSizeString = req.getParameter("pageSize");
+		int pageSize = Integer.parseInt(pageSizeString == null?"15":pageSizeString);
+		//计算总页数
+		Double num = Math.ceil(total*1.0/pageSize);
+		int totalPage = num.intValue();
+		//当前页码
+		String pageString = req.getParameter("page");
+		int page = Integer.parseInt(pageString == null||pageString.equals("")?"1":pageString);
+		if(page<=0){
+			page = 1;
+		}
+		if(page>totalPage){
+			page = totalPage;
+		}
+		//根据分页参数计算出起始记录下标
+		int firstResult = pageSize * (page - 1);
+
+		List<CstCustomer> list = customerService.findCustomerList(query_cstCustomer, firstResult, pageSize);
+		//当前页码
+		req.setAttribute("page", page);
+		//总页数
+		req.setAttribute("totalPage", totalPage);
+		//每页显示个数
+		req.setAttribute("pageSize", pageSize);
+		//总数
+		req.setAttribute("total", total);
+		//列表
+		req.setAttribute("list", list);
+		//成功
+		req.getRequestDispatcher("/jsp/customer/list.jsp").forward(req, resp);
+	}
+
 	
-//添加客户提交
+	//添加客户提交
 	private void addsubmit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
 		//客户信息
 		String custName = req.getParameter("custName");//客户名称
